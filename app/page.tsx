@@ -1,65 +1,228 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Navbar from "./components/Navbar";
+import { getDataBySection } from "./api/jikan";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
+import {
+  FaStar,
+  FaInfoCircle,
+  FaClock,
+  FaTrophy,
+  FaPlayCircle,
+  FaFire,
+  FaCalendarAlt,
+  FaBook,
+} from "react-icons/fa";
+import { Footer } from "./components/Footer";
+import AnimeCard, { BannerProps } from "./components/AnimeCard";
+
+const sections = [
+  // { id: "top-anime", title: "Top Anime", icon: FaStar },
+  { id: "upcoming-anime", title: "Upcoming Anime", icon: FaClock },
+  { id: "best-anime", title: "Best Anime", icon: FaTrophy },
+  { id: "airing-anime", title: "Currently Airing", icon: FaPlayCircle },
+  { id: "popular-anime", title: "Most Popular", icon: FaFire },
+  { id: "seasonal-anime", title: "This Season", icon: FaCalendarAlt },
+  { id: "top-manga", title: "Top Manga", icon: FaBook },
+];
 
 export default function Home() {
+  const [bannerAnime, setBannerAnime] = useState<BannerProps[]>([]);
+  const [sectionData, setSectionData] = useState<Record<string, BannerProps[]>>(
+    {}
+  );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const topAnime = await getDataBySection("top-anime", 1, 10);
+        setBannerAnime(topAnime);
+
+        const allData: Record<string, BannerProps[]> = {};
+        for (const section of sections) {
+          const data = await getDataBySection(section.id, 1, 20);
+          allData[section.id] = data;
+          await new Promise((resolve) => setTimeout(resolve, 350));
+        }
+        setSectionData(allData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div className="flex flex-col min-h-screen bg-[#0B0D12] font-body">
+      <Navbar />
+      <header className="w-full">
+        <Banner topAnime={bannerAnime} />
+      </header>
+
+      <main className="min-h-screen pb-16">
+        {loading ? (
+          <div className="container mx-auto px-4 py-8 text-center text-white">
+            <div className="flex flex-col items-center gap-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+              <p>Loading anime data...</p>
+            </div>
+          </div>
+        ) : (
+          sections.map((section) => (
+            <section key={section.id} className="container mx-auto px-4 py-8">
+              <div className="flex items-center mb-6">
+                <section.icon className="text-purple-600 mr-2 text-4xl" />
+                <h2 className="text-2xl md:text-3xl font-bold font-heading text-white">
+                  {section.title}
+                </h2>
+                <hr className="flex-1 border-gray-700 ml-4" />
+              </div>
+
+              <div className="relative">
+                <div
+                  className="flex gap-6 overflow-x-auto pb-4 scroll-smooth"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "#374151 transparent",
+                  }}
+                >
+                  {sectionData[section.id]?.length > 0 ? (
+                    sectionData[section.id].map((anime) => (
+                      <div key={anime.mal_id} className="flex-none">
+                        <AnimeCard anime={anime} />
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-400">No data available</p>
+                  )}
+                </div>
+              </div>
+            </section>
+          ))
+        )}
       </main>
+
+      <Footer />
+    </div>
+  );
+}
+
+export function Banner({ topAnime }: { topAnime: BannerProps[] }) {
+  if (!topAnime || topAnime.length === 0) {
+    return (
+      <div className="w-full h-screen bg-gradient-to-b from-gray-900 to-[#0B0D12] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+          <p className="text-white">Loading banner...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full h-screen relative">
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay, EffectFade]}
+        spaceBetween={0}
+        slidesPerView={1}
+        navigation
+        pagination={{
+          clickable: true,
+          bulletClass: "swiper-pagination-bullet !bg-white !opacity-50",
+          bulletActiveClass: "swiper-pagination-bullet-active !opacity-100",
+        }}
+        autoplay={{ delay: 6000, disableOnInteraction: false }}
+        effect="fade"
+        loop={true}
+        className="w-full h-full"
+      >
+        {topAnime.map((anime) => (
+          <SwiperSlide key={anime.mal_id}>
+            <div className="relative w-full h-full">
+              <Image
+                src={anime.images.jpg.large_image_url}
+                alt={anime.title}
+                fill
+                className="object-cover"
+                priority={true}
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D12] via-black/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
+
+              <div className="absolute inset-0 flex items-center">
+                <div className="container mx-auto px-4 md:px-8 lg:px-16">
+                  <div className="max-w-2xl space-y-4">
+                    <div className="flex items-center gap-3 text-sm text-gray-300">
+                      {anime.score && (
+                        <div className="flex items-center gap-1 bg-yellow-500/20 px-3 py-1 rounded-full">
+                          <FaStar className="text-yellow-400" />
+                          <span className="font-bold text-yellow-400">
+                            {anime.score}
+                          </span>
+                        </div>
+                      )}
+                      {anime.year && (
+                        <span className="bg-white/10 px-3 py-1 rounded-full">
+                          {anime.year}
+                        </span>
+                      )}
+                      {anime.episodes && (
+                        <span className="bg-white/10 px-3 py-1 rounded-full">
+                          {anime.episodes} Episodes
+                        </span>
+                      )}
+                    </div>
+
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-tight">
+                      {anime.title}
+                    </h1>
+
+                    {anime.genres && anime.genres.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {anime.genres.slice(0, 4).map((genre) => (
+                          <span
+                            key={genre.name}
+                            className="text-xs md:text-sm px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-gray-200"
+                          >
+                            {genre.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {anime.synopsis && (
+                      <p className="text-gray-300 text-sm md:text-base line-clamp-3 max-w-xl">
+                        {anime.synopsis}
+                      </p>
+                    )}
+
+                    <div className="flex gap-4 pt-4">
+                      <Link
+                        href={`/anime/${anime.mal_id}`}
+                        className="flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition"
+                      >
+                        <FaInfoCircle />
+                        More Info
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }

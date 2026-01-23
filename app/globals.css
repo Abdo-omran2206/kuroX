@@ -3,13 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-bg: #0B0D12;
+  --color-primary: #7C4DFF;
+  --color-accent: #00E5FF;
+  --color-text: #FFFFFF;
+  --font-body: var(--font-jakarta);
+  --font-heading: var(--font-sora);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-sora);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,9 +24,28 @@
     --foreground: #ededed;
   }
 }
+/* globals.css */
+.flex::-webkit-scrollbar {
+  display: none;
+  scroll-behavior: smooth;
+}
+.flex {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  scroll-behavior: smooth;
+  
+}
 
 body {
-  background: var(--background);
+  background: var(--color-bg);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
 }
