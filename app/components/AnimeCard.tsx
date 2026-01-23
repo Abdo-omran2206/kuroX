@@ -18,7 +18,7 @@ export interface BannerProps {
 export default function AnimeCard({ anime }: { anime: BannerProps }) {
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/anime/${anime.mal_id}`);
+    router.push(`/anime/animeDetails/${anime.mal_id}`);
   };
   return (
     <div
