@@ -7,6 +7,27 @@ const api = axios.create({
   baseURL,
 });
 
+// Add a rate limit interceptor
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const { config, response } = error;
+    
+    // If we hit a 429 (Too Many Requests)
+    if (response && response.status === 429) {
+      console.warn("Jikan API rate limit hit, retrying...");
+      
+      // Wait for 1 second before retrying (Jikan limit is 3 requests/sec)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      
+      // Retry the request
+      return api(config);
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
 // ==========================
 // Get Top Anime
 // ==========================

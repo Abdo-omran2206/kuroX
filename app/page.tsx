@@ -48,8 +48,8 @@ export default function Home() {
         for (const section of sections) {
           const data = await getDataBySection(section.id, 1, 20);
           setSectionData((prev) => ({ ...prev, [section.id]: data }));
-          // Staggered fetch to avoid rate limits
-          await new Promise((resolve) => setTimeout(resolve, 200));
+          // Staggered fetch to avoid rate limits (3 requests per second limit)
+          await new Promise((resolve) => setTimeout(resolve, 400));
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -97,9 +97,9 @@ export default function Home() {
                   {[...Array(6)].map((_, i) => (
                     <div
                       key={i}
-                      className="flex-none w-[300px] h-[450px] bg-white/5 rounded-xl border border-white/10 animate-pulse"
+                      className="flex-none w-[280px] h-[400px] bg-white/5 rounded-xl border border-white/10 animate-pulse"
                     >
-                      <div className="w-full h-[420px] bg-white/5"></div>
+                      <div className="w-full h-full bg-white/5"></div>
                       <div className="p-4 space-y-2">
                         <div className="h-4 bg-white/10 rounded w-3/4"></div>
                         <div className="h-3 bg-white/10 rounded w-1/2"></div>

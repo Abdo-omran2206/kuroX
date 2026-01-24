@@ -92,8 +92,11 @@ export default function AnimeDetailsPage() {
     async function fetchAnime() {
       try {
         const data = await getAnimeById(Number(id));
+        await new Promise((resolve) => setTimeout(resolve, 350));
         const characters = await getAnimeCharacters(Number(id));
+        await new Promise((resolve) => setTimeout(resolve, 350));
         const recommendations = await getAnimeRecommendations(Number(id));
+        await new Promise((resolve) => setTimeout(resolve, 350));
         const epData = await getAnimeEpisodes(Number(id));
 
         setAnimeDetails({ ...data, characters, recommendations });
