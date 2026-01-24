@@ -9,6 +9,7 @@ import {
   getAnimeById,
   getAnimeCharacters,
   getAnimeRecommendations,
+  getAnimeEpisodes,
 } from "@/app/api/jikan";
 import Navbar from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
@@ -77,11 +78,11 @@ export interface AnimeDetailsPageProps {
 type AnimeDetails = AnimeDetailsPageProps["data"];
 
 /* ================= PAGE ================= */
-
 export default function AnimeDetailsPage() {
   const { id } = useParams<{ id: string }>();
 
   const [animeDetails, setAnimeDetails] = useState<AnimeDetails | null>(null);
+  const [episodes, setEpisodes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [openTrailer, setOpenTrailer] = useState(false);
 
@@ -93,8 +94,10 @@ export default function AnimeDetailsPage() {
         const data = await getAnimeById(Number(id));
         const characters = await getAnimeCharacters(Number(id));
         const recommendations = await getAnimeRecommendations(Number(id));
+        const epData = await getAnimeEpisodes(Number(id));
+
         setAnimeDetails({ ...data, characters, recommendations });
-        console.log({ ...data, characters, recommendations });
+        setEpisodes(epData.episodes);
       } catch (error) {
         console.error("Failed to fetch anime:", error);
       } finally {
@@ -104,6 +107,12 @@ export default function AnimeDetailsPage() {
 
     fetchAnime();
   }, [id]);
+
+  useEffect(() => {
+    if (animeDetails?.title) {
+      document.title = `${animeDetails.title} | kuroX`;
+    }
+  }, [animeDetails]);
 
   if (loading || !animeDetails) {
     return (
@@ -129,19 +138,25 @@ export default function AnimeDetailsPage() {
 
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
-        <div className="absolute bottom-0 left-0 right-0 p-8 flex gap-8 h-screen items-center">
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 flex flex-col md:flex-row gap-8 h-full justify-center md:justify-start md:pl-20 items-center">
           {/* Poster */}
-          <Image
-            src={animeDetails.images.jpg.large_image_url || "/placeholder.jpg"}
-            alt={animeDetails.title}
-            width={350}
-            height={450}
-            className="rounded-lg shadow-xl hover:scale-105 transition-transform shadow-black/50 hover:shadow-black duration-200 "
-          />
+          <div className="relative shrink-0">
+            <Image
+              src={
+                animeDetails.images.jpg.large_image_url || "/placeholder.jpg"
+              }
+              alt={animeDetails.title}
+              width={350}
+              height={450}
+              className="rounded-lg shadow-xl bg-zinc-800 object-cover w-[220px] md:w-[350px] h-auto shadow-black/50 hover:shadow-black hover:scale-105 transition-transform duration-200"
+            />
+          </div>
 
           {/* Info */}
-          <div className="max-w-3xl">
-            <h1 className="text-4xl font-bold">{animeDetails.title}</h1>
+          <div className="max-w-3xl text-center md:text-left z-10 animate-fade-in-right">
+            <h1 className="text-3xl md:text-5xl font-bold leading-tight text-shadow-2xl">
+              {animeDetails.title}
+            </h1>
             {animeDetails.title_japanese && (
               <p className="text-gray-300 mt-1">
                 {animeDetails.title_japanese}
@@ -149,7 +164,7 @@ export default function AnimeDetailsPage() {
             )}
 
             {/* Meta */}
-            <div className="flex flex-wrap gap-3 mt-4">
+            <div className="flex flex-wrap gap-3 mt-4 justify-center md:justify-start">
               {animeDetails.type && <Badge text={animeDetails.type} />}
               {animeDetails.episodes && (
                 <Badge text={`${animeDetails.episodes} Episodes`} />
@@ -164,11 +179,11 @@ export default function AnimeDetailsPage() {
             </div>
 
             {/* Genres */}
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
               {animeDetails.genres.map((genre) => (
                 <span
                   key={genre.mal_id}
-                  className="px-3 py-1 rounded-full bg-cyan-600/30 border border-cyan-500 text-sm"
+                  className="px-3 py-1 rounded-full bg-cyan-600/30 border border-cyan-500 text-sm hover:bg-cyan-600/50 transition-colors cursor-default"
                 >
                   {genre.name}
                 </span>
@@ -184,7 +199,7 @@ export default function AnimeDetailsPage() {
             {animeDetails.trailer && (
               <button
                 onClick={() => setOpenTrailer(true)}
-                className="mt-4 px-6 py-2 bg-purple-700 hover:bg-purple-600 rounded-lg transition-colors flex items-center gap-2"
+                className="mt-6 px-6 py-3 bg-purple-700 hover:bg-purple-600 rounded-lg transition-colors flex items-center gap-2 mx-auto md:mx-0 font-semibold"
               >
                 ▶ Watch Trailer
               </button>
@@ -221,12 +236,31 @@ export default function AnimeDetailsPage() {
       )}
 
       {/* ================= EXTRA INFO ================= */}
-      <main className="flex-col justify-around mx-auto p-8 gap-10 ">
-        <section className="flex gap-10">
-          <div className="flex-2 space-y-6">
+      <main className="mx-auto p-4 md:p-8 space-y-16">
+        {/* Episodes Section */}
+        {episodes && episodes.length > 0 && (
+          <section className="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 shadow-inner">
+            <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
+              <span className="w-1.5 h-8 bg-purple-600 rounded-full" />
+              Episodes
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-hide">
+              {episodes.map((ep: any) => (
+                <EpisodeCard key={ep.mal_id} episode={ep} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="flex flex-col lg:flex-row gap-10">
+          <div className="w-full lg:w-2/3 space-y-6">
             <CharactersSection characters={animeDetails.characters} />
           </div>
-          <div className="flex-1 space-y-3">
+          <div className="w-full lg:w-1/3 space-y-3">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <span className="w-1 h-6 bg-cyan-600 rounded-full" />
+              Details
+            </h2>
             <Info label="Aired" value={animeDetails.aired.string} />
             <Info label="Duration" value={animeDetails.duration} />
             <Info label="Rating" value={animeDetails.rating} />
@@ -249,20 +283,21 @@ export default function AnimeDetailsPage() {
           </div>
         </section>
 
-        <div className="mt-16">
-          <h2>Recommendations</h2>
-          {/* Recommendations component can be added here */}
-          {animeDetails.recommendations &&
-          animeDetails.recommendations.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-              {animeDetails.recommendations.map((rec: any) => (
-                <RecommendationsCard key={rec.entry.mal_id} data={rec} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-400 mt-6">No recommendations available.</p>
+        {/* Recommendations at the bottom */}
+        {animeDetails.recommendations &&
+          animeDetails.recommendations.length > 0 && (
+            <section className="pt-10 border-t border-white/5">
+              <h2 className="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span className="w-1.5 h-8 bg-cyan-600 rounded-full" />
+                Fans Also Loved
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                {animeDetails.recommendations.map((rec: any) => (
+                  <RecommendationsCard key={rec.entry.mal_id} data={rec} />
+                ))}
+              </div>
+            </section>
           )}
-        </div>
       </main>
 
       <Footer />
@@ -367,9 +402,7 @@ export function RecommendationsCard({ data }: RecommendationsCardProps) {
 
       {/* Info */}
       <div className="p-4 space-y-2">
-        <h3 className="text-white font-semibold line-clamp-2">
-          {anime.title}
-        </h3>
+        <h3 className="text-white font-semibold line-clamp-2">{anime.title}</h3>
 
         {data.votes && (
           <p className="text-sm text-gray-400">
@@ -378,5 +411,41 @@ export function RecommendationsCard({ data }: RecommendationsCardProps) {
         )}
       </div>
     </Link>
+  );
+}
+
+function EpisodeCard({ episode }: { episode: any }) {
+  return (
+    <div className="bg-zinc-800/50 p-4 rounded-xl border border-white/5 hover:bg-zinc-800 transition-all group">
+      <div className="flex justify-between items-start gap-4">
+        <div className="flex-1">
+          <p className="text-purple-400 font-bold text-sm">
+            Episode {episode.mal_id}
+          </p>
+          <h3 className="text-white font-medium line-clamp-2 group-hover:text-purple-300 transition-colors">
+            {episode.title}
+          </h3>
+          <p className="text-zinc-500 text-xs mt-1 italic">
+            {episode.title_japanese}
+          </p>
+        </div>
+        {episode.filler && (
+          <span className="text-[10px] bg-yellow-600/20 text-yellow-500 px-2 py-0.5 rounded border border-yellow-500/20">
+            Filler
+          </span>
+        )}
+      </div>
+      <div className="mt-3 flex items-center justify-between text-[10px] text-zinc-400">
+        <span>
+          Aired:{" "}
+          {episode.aired ? new Date(episode.aired).toLocaleDateString() : "N/A"}
+        </span>
+        {episode.score && (
+          <span className="flex items-center gap-1 text-yellow-500">
+            <FaStar /> {episode.score}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }

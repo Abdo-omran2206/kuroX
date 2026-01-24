@@ -186,6 +186,30 @@ export async function getAnimeRecommendations(id: number | string) {
   }
 }
 
+export async function getAnimeEpisodes(id: number, page = 1) {
+  try {
+    const res = await fetch(
+      `https://api.jikan.moe/v4/anime/${id}/episodes?page=${page}`,
+      { next: { revalidate: 60 * 60 } } // optional
+    );
+
+    if (!res.ok) throw new Error("Failed to fetch episodes");
+
+    const data = await res.json();
+    return {
+      episodes: data.data || [],
+      pagination: data.pagination,
+    };
+  } catch (error) {
+    console.error("Error fetching episodes:", error);
+    return {
+      episodes: [],
+      pagination: null,
+    };
+  }
+}
+
+
 // ==========================
 // Helper: Get data by section ID
 // ==========================

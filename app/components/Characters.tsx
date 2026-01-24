@@ -37,7 +37,10 @@ export default function CharactersSection({
   }
   return (
     <section className="mt-1">
-      <h2 className="text-2xl font-bold mb-6">Characters & Voice Actors</h2>
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+        <span className="w-1 h-6 bg-cyan-600 rounded-full" />
+        Characters & Voice Actors
+      </h2>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {characters.slice(0, 9).map((item) => (

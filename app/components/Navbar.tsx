@@ -1,6 +1,15 @@
 import Link from "next/link";
 
 export default function Navbar() {
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Anime", href: "/anime" },
+    { name: "Top", href: "/top-anime" },
+    { name: "Seasonal", href: "/seasonal" },
+    { name: "Genres", href: "/genres" },
+    { name: "Trending", href: "/trending" },
+  ];
+
   return (
     <nav className="w-full px-6 py-2 border-b border-white/10 bg-purple-900/20 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -16,26 +25,16 @@ export default function Navbar() {
 
         {/* Links */}
         <div className="flex items-center gap-6 font-body text-sm">
-          <Link
-            href="/"
-            className="text-[var(--color-text)]/70 hover:text-[var(--color-text)] transition"
-          >
-            Home
-          </Link>
-
-          <Link
-            href="/anime"
-            className="text-[var(--color-text)]/70 hover:text-[var(--color-text)] transition"
-          >
-            Anime
-          </Link>
-
-          <Link
-            href="/contact"
-            className="text-[var(--color-text)]/70 hover:text-[var(--color-text)] transition"
-          >
-            Contact
-          </Link>
+          {navLinks.map((items) => (
+            <Link
+              key={items.name}
+              href="/"
+              // href={items.href}
+              className="text-[var(--color-text)]/70 hover:text-[var(--color-text)] transition"
+            >
+              {items.name}
+            </Link>
+          ))}
         </div>
         <input
           type="search"
