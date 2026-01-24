@@ -37,6 +37,11 @@ export default function Navbar() {
             Contact
           </Link>
         </div>
+        <input
+          type="search"
+          placeholder="Search anime..."
+          className="w-80 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-[var(--color-text)] placeholder-[var(--color-text)]/50 focus:outline-none focus:border-purple-500 transition"
+        />
       </div>
     </nav>
   );

@@ -179,7 +179,7 @@ export async function getAnimeRecommendations(id: number | string) {
   try {
     const res = await fetch(`${baseURL}anime/${id}/recommendations`);
     const data = await res.json();
-    return data.data || [];
+    return data.data.slice(0, 8) || [];
   } catch (error) {
     console.error(`Error fetching recommendations for anime ID ${id}:`, error);
     return [];
