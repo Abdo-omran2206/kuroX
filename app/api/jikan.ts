@@ -1,13 +1,21 @@
+import axios from "axios";
+
 const baseURL = "https://api.jikan.moe/v4/";
+
+// Create axios instance
+const api = axios.create({
+  baseURL,
+});
 
 // ==========================
 // Get Top Anime
 // ==========================
 export async function getTopAnime(page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}top/anime?page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`top/anime`, {
+      params: { page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error fetching top anime:", error);
     return [];
@@ -19,9 +27,10 @@ export async function getTopAnime(page = 1, limit = 10) {
 // ==========================
 export async function getUpcomingAnime(page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}top/anime?filter=upcoming&page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`top/anime`, {
+      params: { filter: "upcoming", page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error fetching upcoming anime:", error);
     return [];
@@ -33,9 +42,10 @@ export async function getUpcomingAnime(page = 1, limit = 10) {
 // ==========================
 export async function getBestAnime(page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}top/anime?filter=favorite&page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`top/anime`, {
+      params: { filter: "favorite", page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error fetching best anime:", error);
     return [];
@@ -47,9 +57,10 @@ export async function getBestAnime(page = 1, limit = 10) {
 // ==========================
 export async function getAiringAnime(page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}top/anime?filter=airing&page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`top/anime`, {
+      params: { filter: "airing", page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error fetching airing anime:", error);
     return [];
@@ -61,9 +72,10 @@ export async function getAiringAnime(page = 1, limit = 10) {
 // ==========================
 export async function getPopularAnime(page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}top/anime?filter=bypopularity&page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`top/anime`, {
+      params: { filter: "bypopularity", page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error fetching popular anime:", error);
     return [];
@@ -75,9 +87,10 @@ export async function getPopularAnime(page = 1, limit = 10) {
 // ==========================
 export async function getTopManga(page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}top/manga?page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`top/manga`, {
+      params: { page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error fetching top manga:", error);
     return [];
@@ -89,9 +102,8 @@ export async function getTopManga(page = 1, limit = 10) {
 // ==========================
 export async function getAnimeById(id: number | string) {
   try {
-    const res = await fetch(`${baseURL}anime/${id}`);
-    const data = await res.json();
-    return data.data || null;
+    const res = await api.get(`anime/${id}`);
+    return res.data.data || null;
   } catch (error) {
     console.error(`Error fetching anime ID ${id}:`, error);
     return null;
@@ -103,9 +115,8 @@ export async function getAnimeById(id: number | string) {
 // ==========================
 export async function getMangaById(id: number | string) {
   try {
-    const res = await fetch(`${baseURL}manga/${id}`);
-    const data = await res.json();
-    return data.data || null;
+    const res = await api.get(`manga/${id}`);
+    return res.data.data || null;
   } catch (error) {
     console.error(`Error fetching manga ID ${id}:`, error);
     return null;
@@ -117,9 +128,10 @@ export async function getMangaById(id: number | string) {
 // ==========================
 export async function searchAnime(query: string, page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}anime?q=${query}&page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`anime`, {
+      params: { q: query, page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error searching anime:", error);
     return [];
@@ -131,9 +143,10 @@ export async function searchAnime(query: string, page = 1, limit = 10) {
 // ==========================
 export async function searchManga(query: string, page = 1, limit = 10) {
   try {
-    const res = await fetch(`${baseURL}manga?q=${query}&page=${page}&limit=${limit}`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`manga`, {
+      params: { q: query, page, limit },
+    });
+    return res.data.data || [];
   } catch (error) {
     console.error("Error searching manga:", error);
     return [];
@@ -145,13 +158,12 @@ export async function searchManga(query: string, page = 1, limit = 10) {
 // ==========================
 export async function getSeasonalAnime(year?: number, season?: string) {
   try {
-    let url = `${baseURL}seasons/now`;
+    let url = `seasons/now`;
     if (year && season) {
-      url = `${baseURL}seasons/${year}/${season}`;
+      url = `seasons/${year}/${season}`;
     }
-    const res = await fetch(url);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(url);
+    return res.data.data || [];
   } catch (error) {
     console.error("Error fetching seasonal anime:", error);
     return [];
@@ -163,9 +175,8 @@ export async function getSeasonalAnime(year?: number, season?: string) {
 // ==========================
 export async function getAnimeCharacters(id: number | string) {
   try {
-    const res = await fetch(`${baseURL}anime/${id}/characters`);
-    const data = await res.json();
-    return data.data || [];
+    const res = await api.get(`anime/${id}/characters`);
+    return res.data.data || [];
   } catch (error) {
     console.error(`Error fetching characters for anime ID ${id}:`, error);
     return [];
@@ -177,28 +188,26 @@ export async function getAnimeCharacters(id: number | string) {
 // ==========================
 export async function getAnimeRecommendations(id: number | string) {
   try {
-    const res = await fetch(`${baseURL}anime/${id}/recommendations`);
-    const data = await res.json();
-    return data.data.slice(0, 8) || [];
+    const res = await api.get(`anime/${id}/recommendations`);
+    return res.data.data.slice(0, 8) || [];
   } catch (error) {
     console.error(`Error fetching recommendations for anime ID ${id}:`, error);
     return [];
   }
 }
 
+// ==========================
+// Get Anime Episodes
+// ==========================
 export async function getAnimeEpisodes(id: number, page = 1) {
   try {
-    const res = await fetch(
-      `https://api.jikan.moe/v4/anime/${id}/episodes?page=${page}`,
-      { next: { revalidate: 60 * 60 } } // optional
-    );
+    const res = await api.get(`anime/${id}/episodes`, {
+      params: { page },
+    });
 
-    if (!res.ok) throw new Error("Failed to fetch episodes");
-
-    const data = await res.json();
     return {
-      episodes: data.data || [],
-      pagination: data.pagination,
+      episodes: res.data.data || [],
+      pagination: res.data.pagination,
     };
   } catch (error) {
     console.error("Error fetching episodes:", error);
@@ -208,7 +217,6 @@ export async function getAnimeEpisodes(id: number, page = 1) {
     };
   }
 }
-
 
 // ==========================
 // Helper: Get data by section ID
