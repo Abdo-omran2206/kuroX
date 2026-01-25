@@ -147,12 +147,12 @@ export async function getMangaById(id: number | string) {
 // ==========================
 // Search Anime
 // ==========================
-export async function searchAnime(query: string, page = 1, limit = 10) {
+export async function searchAnime(query: string, page = 1,) {
   try {
     const res = await api.get(`anime`, {
-      params: { q: query, page, limit },
+      params: { q: query, page },
     });
-    return res.data.data || [];
+    return res.data || [];
   } catch (error) {
     console.error("Error searching anime:", error);
     return [];

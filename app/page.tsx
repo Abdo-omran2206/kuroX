@@ -19,6 +19,8 @@ import {
   FaFire,
   FaCalendarAlt,
   FaBook,
+  FaChevronRight,
+  FaChevronLeft,
 } from "react-icons/fa";
 import { Footer } from "./components/Footer";
 import AnimeCard, { BannerProps } from "./components/AnimeCard";
@@ -137,24 +139,16 @@ export default function Home() {
 }
 
 function Banner({ topAnime }: { topAnime: BannerProps[] }) {
-  if (!topAnime || topAnime.length === 0) {
-    return (
-      <div className="w-full h-screen bg-gradient-to-b from-gray-900 to-[#0B0D12] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-          <p className="text-white">Loading banner...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="w-full h-screen relative">
+    <div className="w-full h-[90vh] max-sm:h-screen relative">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         spaceBetween={0}
         slidesPerView={1}
-        navigation
+        navigation={{
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        }}
         pagination={{
           clickable: true,
           bulletClass: "swiper-pagination-bullet !bg-white !opacity-50",
@@ -179,10 +173,10 @@ function Banner({ topAnime }: { topAnime: BannerProps[] }) {
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B0D12] via-black/70 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
 
-              <div className="absolute inset-0 flex items-center">
-                <div className="container mx-auto px-4 md:px-8 lg:px-16">
+              <div className="absolute inset-0 flex items-center justify-start max-sm:justify-center max-sm:flex-col px-4">
+                <div className="w-full flex items-center justify-start max-sm:justify-center max-sm:flex-col container mx-auto px-4 md:px-8 lg:px-16">
                   <div className="max-w-2xl space-y-4">
-                    <div className="flex items-center gap-3 text-sm text-gray-300">
+                    <div className="flex items-center max-sm:justify-center gap-3 text-sm text-gray-300">
                       {anime.score && (
                         <div className="flex items-center gap-1 bg-yellow-500/20 px-3 py-1 rounded-full">
                           <FaStar className="text-yellow-400" />
@@ -203,12 +197,12 @@ function Banner({ topAnime }: { topAnime: BannerProps[] }) {
                       )}
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-tight">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-tight max-sm:text-center">
                       {anime.title}
                     </h1>
 
                     {anime.genres && anime.genres.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 max-sm:justify-center">
                         {anime.genres.slice(0, 4).map((genre) => (
                           <span
                             key={genre.name}
@@ -221,12 +215,19 @@ function Banner({ topAnime }: { topAnime: BannerProps[] }) {
                     )}
 
                     {anime.synopsis && (
-                      <p className="text-gray-300 text-sm md:text-base line-clamp-3 max-w-xl">
+                      <p className="text-gray-300 text-sm md:text-base line-clamp-3 max-w-xl max-sm:text-center">
                         {anime.synopsis}
                       </p>
                     )}
+                    {/* Navigation buttons */}
+                    <div className="swiper-button-next z-20 flex items-center justify-center w-12 h-12 rounded-full shadow-lg text-white cursor-pointer transition-all duration-300">
+                      <FaChevronRight className="w-6 h-6 text-purple-700 hover:scale-105 hover:text-shadow-xl hover:text-purple-800" />
+                    </div>
 
-                    <div className="flex gap-4 pt-4">
+                    <div className="swiper-button-prev z-20 flex items-center justify-center w-12 h-12 rounded-full shadow-lg text-white cursor-pointer transition-all duration-300">
+                      <FaChevronLeft className="w-6 h-6 text-purple-700 hover:scale-105 hover:text-shadow-xl hover:text-purple-800" />
+                    </div>
+                    <div className="flex gap-4 pt-4 max-sm:justify-center">
                       <Link
                         href={`/anime/animeDetails/${anime.mal_id}`}
                         className="flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/20 transition"

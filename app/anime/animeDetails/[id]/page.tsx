@@ -1,10 +1,8 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
-
 import {
   getAnimeById,
   getAnimeCharacters,
@@ -15,6 +13,7 @@ import Navbar from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
 import CharactersSection from "@/app/components/Characters";
 import Link from "next/link";
+import LoadingModel from "@/app/components/Loading";
 
 /* ================= TYPES ================= */
 
@@ -119,9 +118,15 @@ export default function AnimeDetailsPage() {
 
   if (loading || !animeDetails) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
-        Loading...
-      </div>
+      <>
+        <Navbar />
+
+        <main className="min-h-screen flex flex-col items-center justify-center text-white space-y-4">
+          <LoadingModel />
+        </main>
+
+        <Footer />
+      </>
     );
   }
 
@@ -195,10 +200,13 @@ export default function AnimeDetailsPage() {
 
             {/* Synopsis */}
             {animeDetails.synopsis && (
-              <p className="mt-6 text-gray-200 leading-relaxed">
-                {animeDetails.synopsis}
+              <p className="mt-6 text-gray-200 leading-relaxed text-sm md:text-base max-w-3xl line-clamp-5">
+                {animeDetails.synopsis.length > 400
+                  ? animeDetails.synopsis.slice(0, 400) + "…"
+                  : animeDetails.synopsis}
               </p>
             )}
+
             {animeDetails.trailer && (
               <button
                 onClick={() => setOpenTrailer(true)}
