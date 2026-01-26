@@ -135,7 +135,7 @@ export default function AnimeDetailsPage() {
       <Navbar />
 
       {/* ================= HERO ================= */}
-      <header className="relative h-[700px] w-full overflow-hidden">
+      <header className="relative h-[700px] max-md:min-h-screen max-md:h-auto max-md:py-20 w-full overflow-hidden">
         <Image
           src={animeDetails.images.jpg.large_image_url || "/placeholder.jpg"}
           alt={animeDetails.title}
@@ -265,7 +265,7 @@ export default function AnimeDetailsPage() {
 
         <section className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-2/3 space-y-6">
-            <CharactersSection characters={animeDetails.characters} />
+            <CharactersSection characters={animeDetails.characters} animeId={animeDetails.mal_id} />
           </div>
           <div className="w-full lg:w-1/3 space-y-3">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">

@@ -1,23 +1,27 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Sora } from "next/font/google";
+import { Racing_Sans_One, Noto_Sans } from "next/font/google";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
+// فونت العناوين
+const racingSans = Racing_Sans_One({
   subsets: ["latin"],
-  variable: "--font-jakarta",
-  weight: ["400", "500", "600", "700"],
+  variable: "--font-heading",
+  weight: "400",
+  display: "swap",
 });
 
-const sora = Sora({
+// فونت النصوص
+const notoSans = Noto_Sans({
   subsets: ["latin"],
-  variable: "--font-sora",
+  variable: "--font-body",
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "kuroX | Discover Your Next Favorite Anime",
   description:
-    "Explore the ultimate anime universe with kuroX. Track seasonal hits, top-rated series, and discover your next obsession with our premium database.",
+    "Explore the ultimate anime universe with kuroX. Track seasonal hits, top-rated series, and discover your next obsession.",
   icons: {
     icon: "/favicon.svg",
   },
@@ -25,12 +29,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${jakarta.variable} ${sora.variable} antialiased`}>
+      <body
+        className={`
+          ${racingSans.variable} 
+          ${notoSans.variable} 
+          antialiased bg-black text-white
+        `}
+      >
         {children}
       </body>
     </html>

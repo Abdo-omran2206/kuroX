@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
-interface CharactersSectionProps {
+import Link from "next/link";
+export interface CharactersSectionProps {
   characters?: {
     character: {
       mal_id: number;
@@ -25,10 +26,12 @@ interface CharactersSectionProps {
       language: string;
     }[];
   }[];
+  animeId?: number;
 }
 
 export default function CharactersSection({
   characters,
+  animeId,
 }: CharactersSectionProps) {
   if (!characters || characters.length === 0) {
     return (
@@ -48,13 +51,13 @@ export default function CharactersSection({
         ))}
 
         {characters.length > 5 && (
-          <button
-            onClick={() => console.log("Show more clicked")} // أو router.push / modal
-            className="flex items-center justify-center rounded-xl border border-dashed border-gray-500 
+          <Link
+          href={`/anime/characters/${animeId}`}
+          className="flex items-center justify-center rounded-xl border border-dashed border-gray-500 
                  text-white hover:bg-gray-800 transition"
           >
             <span className="text-lg font-semibold">+ Show More</span>
-          </button>
+          </Link>
         )}
       </div>
     </section>

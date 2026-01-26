@@ -10,11 +10,11 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Anime", href: "/anime" },
-    { name: "Top", href: "/top-anime" },
-    { name: "Seasonal", href: "/seasonal" },
-    { name: "Genres", href: "/genres" },
-    { name: "Trending", href: "/trending" },
+    // { name: "Anime", href: "/anime" },
+    { name: "Top", href: "/anime/top-anime" },
+    { name: "Seasonal", href: "/anime/seasonal" },
+    { name: "Genres", href: "/anime/genres" },
+    { name: "Trending", href: "/anime/trending" },
   ];
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {

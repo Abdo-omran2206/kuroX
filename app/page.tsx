@@ -86,7 +86,7 @@ export default function Home() {
           <section key={section.id} className="container mx-auto px-4 py-8">
             <div className="flex items-center mb-6">
               <section.icon className="text-purple-600 mr-2 text-4xl" />
-              <h2 className="text-2xl md:text-3xl font-bold font-heading text-white">
+              <h2 className="text-2xl md:text-3xl bangers-regular text-white">
                 {section.title}
               </h2>
               <hr className="flex-1 border-gray-700 ml-4" />

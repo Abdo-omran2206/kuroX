@@ -239,6 +239,58 @@ export async function getAnimeEpisodes(id: number, page = 1) {
   }
 }
 
+// api/jikan.ts
+export async function fetchAnimeByCategory(
+  category: "top" | "seasonal" | "genres" | "trending",
+  page = 1,
+  limit = 25,
+  options?: { year?: number; season?: string; genreId?: number }
+) {
+  try {
+    let url = "";
+
+    switch (category) {
+      case "top":
+        url = `top/anime`;
+        break;
+
+      case "seasonal":
+        if (options?.year && options?.season) {
+          url = `seasons/${options.year}/${options.season}`;
+        } else {
+          url = `seasons/now`;
+        }
+        break;
+
+      case "genres":
+        if (!options?.genreId) throw new Error("genreId is required for genres");
+        url = `genres/${options.genreId}/anime`;
+        break;
+
+      case "trending":
+        url = `top/anime?filter=bypopularity`;
+        break;
+
+      default:
+        throw new Error("Invalid category");
+    }
+
+    const res = await api.get(url, {
+      params: { page, limit },
+    });
+
+    const animeList = res.data.data || [];
+    const lastPage = res.data.pagination?.last_visible_page || 1;
+
+    return { animeList, lastPage };
+  } catch (error) {
+    console.error(`Error fetching ${category} anime:`, error);
+    return { animeList: [], lastPage: 1 };
+  }
+}
+
+
+
 // ==========================
 // Helper: Get data by section ID
 // ==========================

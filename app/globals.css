@@ -1,81 +1,81 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Sora:wght@100..800&family=Zen+Dots&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
+/* =====================
+   CSS VARIABLES
+===================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --color-bg: #0b0d12;
+  --background: #0b0d12;
+  --foreground: #ededed;
+
   --color-primary: #7c4dff;
   --color-accent: #00e5ff;
   --color-text: #ffffff;
-  --font-body: var(--font-jakarta);
-  --font-heading: var(--font-sora);
+
+  /* Fonts */
+  --font-body: "Noto Sans", system-ui, sans-serif;
+  --font-heading: "Racing Sans One", system-ui, sans-serif;
 }
+
+/* =====================
+   TAILWIND THEME
+===================== */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-jakarta);
-  --font-mono: var(--font-sora);
+
+  --font-sans: var(--font-body);
+  --font-body: var(--font-body);
+  --font-heading: var(--font-heading);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-/* globals.css */
-.flex::-webkit-scrollbar {
-  display: none;
-  scroll-behavior: smooth;
-}
-.flex {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  scroll-behavior: smooth;
-}
 
-.sora {
-  font-optical-sizing: auto;
-  font-style: normal;
-}
-
-.plus-jakarta-sans {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-}
+/* =====================
+   BASE STYLES
+===================== */
 
 body {
-  background: var(--color-bg);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.font-body {
   font-family: var(--font-body);
 }
 
-.font-heading {
-  font-family: var(--font-heading);
-}
-
+/* Headings */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  /* font-family: var(--font-heading); */
-  font-family: "Zen Dots", sans-serif;
+  font-family: var(--font-heading);
+  letter-spacing: 0.05em;
 }
 
-span,
-p {
-  /* font-family: var(--font-body);  */
-  font-family: "Sora", sans-serif;
+/* Text */
+p,
+span {
+  font-family: var(--font-body);
 }
+
+/* =====================
+   SCROLLBAR (HIDDEN)
+===================== */
+
+.flex::-webkit-scrollbar {
+  display: none;
+}
+
+.flex {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+/* =====================
+   ANIMATIONS
+===================== */
 
 @keyframes fadeInRight {
   from {
@@ -91,6 +91,10 @@ p {
 .animate-fade-in-right {
   animation: fadeInRight 0.6s ease-out forwards;
 }
+
+/* =====================
+   UTILITIES
+===================== */
 
 .text-shadow-2xl {
   text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
