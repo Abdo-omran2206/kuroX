@@ -24,7 +24,7 @@ export default function SearchPage() {
     async function searchAnimeData() {
       try {
         setIsLoading(true);
-        const response = await searchAnime(query, pageNumber);
+        const response = await searchAnime(query as string, pageNumber);
 
         setAnimeResults(response.data);
         setVisiblePages(response.pagination.last_visible_page);
