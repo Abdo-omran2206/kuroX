@@ -9,6 +9,8 @@ import AnimeCard, { BannerProps } from "../components/AnimeCard";
 import { FaBackward, FaForward } from "react-icons/fa";
 import LoadingModel from "../components/Loading";
 
+export const dynamic = 'force-dynamic';
+
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.trim();
