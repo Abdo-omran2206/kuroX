@@ -3,15 +3,13 @@
 import Navbar from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { searchAnime } from "../api/jikan";
 import AnimeCard, { BannerProps } from "../components/AnimeCard";
 import { FaBackward, FaForward } from "react-icons/fa";
 import LoadingModel from "../components/Loading";
 
-export const dynamic = 'force-dynamic';
-
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q")?.trim();
 
@@ -90,7 +88,7 @@ export default function SearchPage() {
                   className="px-4 py-2 rounded-md bg-purple-700 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-purple-600 transition"
                   onClick={() => {
                     setPageNumber((p) => Math.max(1, p - 1));
-                    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   disabled={pageNumber === 1}
                 >
@@ -105,7 +103,7 @@ export default function SearchPage() {
                   className="px-4 py-2 rounded-md bg-purple-700 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-purple-600 transition"
                   onClick={() => {
                     setPageNumber((p) => Math.min(visiblePages, p + 1));
-                    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   disabled={pageNumber === visiblePages}
                 >
@@ -122,5 +120,23 @@ export default function SearchPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <>
+          <Navbar />
+          <main className="min-h-screen flex items-center justify-center py-20">
+            <LoadingModel />
+          </main>
+          <Footer />
+        </>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 }
