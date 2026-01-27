@@ -264,7 +264,7 @@ export async function fetchAnimeByCategory(
 
       case "genres":
         if (!options?.genreId) throw new Error("genreId is required for genres");
-        url = `genres/${options.genreId}/anime`;
+        url = `anime?genres=${options.genreId}&order_by=score&sort=desc`;
         break;
 
       case "trending":
@@ -286,6 +286,17 @@ export async function fetchAnimeByCategory(
   } catch (error) {
     console.error(`Error fetching ${category} anime:`, error);
     return { animeList: [], lastPage: 1 };
+  }
+}
+
+export async function fetchGenres() {
+  try {
+    const res = await api.get("genres/anime");
+
+    return res.data.data; // قائمة الـ genres
+  } catch (error) {
+    console.error("Error fetching genres:", error);
+    return [];
   }
 }
 

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaSearch, FaTimes } from "react-icons/fa";
 
 export default function Navbar() {
   const router = useRouter();
@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    // { name: "Anime", href: "/anime" },
+
     { name: "Top", href: "/anime/top-anime" },
     { name: "Seasonal", href: "/anime/seasonal" },
     { name: "Genres", href: "/anime/genres" },
@@ -40,6 +40,8 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Links */}
+        <div className="flex gap-5 items-center">
+
         <div className="hidden md:flex items-center gap-6 font-body text-sm text-[var(--color-text)]/70">
           {navLinks.map((item) => (
             <Link
@@ -55,16 +57,17 @@ export default function Navbar() {
         {/* Search Bar - desktop */}
         <form
           onSubmit={handleSearch}
-          className="hidden md:block ml-4 flex-shrink-0"
+          className="relative flex w-full md:w-64 max-md:hidden"
+          aria-label="Search Anime"
         >
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="search"
             name="search"
             placeholder="Search anime..."
-            className="w-64 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-[var(--color-text)] placeholder-[var(--color-text)]/50 focus:outline-none focus:border-purple-500 transition"
+            className="w-full pl-10 pr-3 py-2 rounded-full bg-white/10 border border-white/20 text-sm text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
           />
         </form>
-
         {/* Mobile Hamburger */}
         <div className="md:hidden flex items-center gap-2">
           <button
@@ -74,6 +77,8 @@ export default function Navbar() {
             {mobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
           </button>
         </div>
+        </div>
+
       </div>
 
       {/* Mobile Menu */}

@@ -4,8 +4,35 @@ import Link from "next/link";
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const socialLinks = [
+    { icon: <FaGithub size={20} />, href: "#" },
+    { icon: <FaTwitter size={20} />, href: "#" },
+    { icon: <FaDiscord size={20} />, href: "#" },
+  ];
+
+  const quickLinks = [
+    { label: "Browse Anime", href: "/" },
+    { label: "Trending Anime", href: "/anime/trending" },
+    { label: "Top Rated", href: "/anime/top-rated" },
+    { label: "Seasonal Anime", href: "/anime/seasonal" },
+  ];
+
+  const categories = [
+    { label: "Action", href: "/anime/genres?genre=1" },
+    { label: "Romance", href: "/anime/genres?genre=22" },
+    { label: "Comedy", href: "/anime/genres?genre=4" },
+    { label: "Fantasy", href: "/anime/genres?genre=10" },
+  ];
+
+  const supportLinks = [
+    { label: "Help Center", href: "/" },
+    { label: "Contact Us", href: "/" },
+    { label: "Privacy Policy", href: "/" },
+    { label: "Terms of Service", href: "/" },
+  ];
+
   return (
-    <footer className="max-w-screen bg-linear-to-b from-[#1a1a2e] to-[#0f1419] border-t border-gray-800">
+    <footer className="bg-gradient-to-b from-[#1a1a2e] to-[#0f1419] border-t border-gray-800">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
@@ -18,24 +45,15 @@ export function Footer() {
               updated with the latest releases and top-rated content.
             </p>
             <div className="flex gap-4">
-              <a
-                href="#"
-                className="text-gray-400 hover:text-purple-400 transition"
-              >
-                <FaGithub size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-cyan-400 transition"
-              >
-                <FaTwitter size={20} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-purple-400 transition"
-              >
-                <FaDiscord size={20} />
-              </a>
+              {socialLinks.map((social, i) => (
+                <Link
+                  key={i}
+                  href={social.href}
+                  className="text-gray-400 hover:text-purple-400 transition"
+                >
+                  {social.icon}
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -45,38 +63,16 @@ export function Footer() {
               Quick Links
             </h4>
             <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/anime"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Browse Anime
-                </Link>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Browse Manga
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Top Rated
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Seasonal Anime
-                </a>
-              </li>
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-cyan-400 transition text-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -86,38 +82,16 @@ export function Footer() {
               Categories
             </h4>
             <ul className="space-y-2">
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-purple-400 transition text-sm"
-                >
-                  Action
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-purple-400 transition text-sm"
-                >
-                  Romance
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-purple-400 transition text-sm"
-                >
-                  Comedy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-purple-400 transition text-sm"
-                >
-                  Fantasy
-                </a>
-              </li>
+              {categories.map((cat) => (
+                <li key={cat.href}>
+                  <Link
+                    href={cat.href}
+                    className="text-gray-400 hover:text-purple-400 transition text-sm"
+                  >
+                    {cat.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -127,38 +101,16 @@ export function Footer() {
               Support
             </h4>
             <ul className="space-y-2">
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Help Center
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-cyan-400 transition text-sm"
-                >
-                  Terms of Service
-                </a>
-              </li>
+              {supportLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-gray-400 hover:text-cyan-400 transition text-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -175,13 +127,11 @@ export function Footer() {
               <span>by anime fans</span>
             </div>
             <p className="text-gray-500 text-xs">
-              Powered by <span className="text-purple-400">Jikan API</span>
+              Powered by <Link href="https://docs.api.jikan.moe/" className="text-purple-400">Jikan API</Link>
             </p>
           </div>
         </div>
       </div>
-
-      {/* Decorative gradient line at bottom */}
     </footer>
   );
 }
