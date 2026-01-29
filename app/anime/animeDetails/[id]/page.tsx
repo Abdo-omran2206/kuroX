@@ -135,7 +135,8 @@ export default function AnimeDetailsPage() {
       <Navbar />
 
       {/* ================= HERO ================= */}
-      <header className="relative h-[700px] max-md:min-h-screen max-md:h-auto max-md:py-20 w-full overflow-hidden">
+      <header className="relative w-full min-h-screen md:min-h-[700px] overflow-hidden">
+        {/* Background */}
         <Image
           src={animeDetails.images.jpg.large_image_url || "/placeholder.jpg"}
           alt={animeDetails.title}
@@ -144,9 +145,11 @@ export default function AnimeDetailsPage() {
           priority
         />
 
+        {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 flex flex-col md:flex-row gap-8 h-full justify-center md:justify-start md:pl-20 items-center">
+        {/* CONTENT */}
+        <div className="relative z-10 px-4 md:px-8 py-10 md:py-32 flex flex-col md:flex-row gap-8 md:pl-20 items-center md:items-center">
           {/* Poster */}
           <div className="relative shrink-0">
             <Image
@@ -156,15 +159,16 @@ export default function AnimeDetailsPage() {
               alt={animeDetails.title}
               width={350}
               height={450}
-              className="rounded-lg shadow-xl bg-zinc-800 object-cover w-[220px] md:w-[350px] h-auto shadow-black/50 hover:shadow-black hover:scale-105 transition-transform duration-200"
+              className="rounded-lg shadow-xl bg-zinc-800 object-cover w-[220px] md:w-[350px] h-auto shadow-black/50 hover:scale-105 transition-transform"
             />
           </div>
 
           {/* Info */}
-          <div className="max-w-3xl text-center md:text-left z-10 animate-fade-in-right">
-            <h1 className="text-3xl md:text-5xl font-bold leading-tight text-shadow-2xl">
+          <div className="max-w-3xl text-center md:text-left">
+            <h1 className="text-3xl md:text-5xl font-bold leading-tight">
               {animeDetails.title}
             </h1>
+
             {animeDetails.title_japanese && (
               <p className="text-gray-300 mt-1">
                 {animeDetails.title_japanese}
@@ -191,7 +195,7 @@ export default function AnimeDetailsPage() {
               {animeDetails.genres.map((genre) => (
                 <span
                   key={genre.mal_id}
-                  className="px-3 py-1 rounded-full bg-cyan-600/30 border border-cyan-500 text-sm hover:bg-cyan-600/50 transition-colors cursor-default"
+                  className="px-3 py-1 rounded-full bg-cyan-600/30 border border-cyan-500 text-sm"
                 >
                   {genre.name}
                 </span>
@@ -207,6 +211,7 @@ export default function AnimeDetailsPage() {
               </p>
             )}
 
+            {/* Trailer */}
             {animeDetails.trailer && (
               <button
                 onClick={() => setOpenTrailer(true)}
@@ -265,7 +270,10 @@ export default function AnimeDetailsPage() {
 
         <section className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-2/3 space-y-6">
-            <CharactersSection characters={animeDetails.characters} animeId={animeDetails.mal_id} />
+            <CharactersSection
+              characters={animeDetails.characters}
+              animeId={animeDetails.mal_id}
+            />
           </div>
           <div className="w-full lg:w-1/3 space-y-3">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
