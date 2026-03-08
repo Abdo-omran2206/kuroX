@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     domains: [
       "cdn.myanimelist.net", // السماح بصور MyAnimeList
     ],
+    unoptimized: true, 
   },
   reactStrictMode: true,
 };
